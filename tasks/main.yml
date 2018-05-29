@@ -83,9 +83,9 @@
   copy:
     src: ecd.wsgi
     dest: "{{ openio_ecd_sysconfig_dir }}/{{ openio_ecd_servicename }}/{{ openio_ecd_servicename }}.wsgi"
-    owner: openio                                                                                                       
-    group: openio                                                                                                       
-    mode: 0644 
+    owner: openio
+    group: openio
+    mode: 0644
 
 - name: restart ecd
   shell: |
