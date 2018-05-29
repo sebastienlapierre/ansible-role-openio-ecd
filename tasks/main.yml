@@ -76,7 +76,8 @@
       dest: "{{ openio_ecd_sysconfig_dir }}/\
         ecd-{{ openio_ecd_serviceid }}/ecd-{{ openio_ecd_serviceid }}-httpd.conf"
     - src: "gridinit_ecd.conf.j2"
-      dest: "{{ openio_ecd_gridinit_dir }}/ecd-{{ openio_ecd_serviceid }}.conf"
+      dest: "{{ openio_ecd_gridinit_dir }}/{{ openio_keystone_gridinit_file_prefix }}\
+        ecd-{{ openio_ecd_serviceid }}.conf"
   register: _ecd_conf
 
 - name: Copy WSGI Script
