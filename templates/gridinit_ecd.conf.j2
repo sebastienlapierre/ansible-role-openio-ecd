@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+[Service.{{ openio_ecd_namespace }}-ecd-{{ openio_ecd_serviceid }}]
+command={{ ecd_httpd_bin }} -D FOREGROUND -f {{ openio_ecd_sysconfig_dir }}/{{ openio_ecd_servicename }}/{{ openio_ecd_servicename }}-httpd.conf
+enabled=true
+start_at_boot=true
+on_die=respawn
+group={{ openio_ecd_namespace }},ecd,{{ openio_ecd_serviceid }}
+uid=openio
+gid=openio
+env.PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin

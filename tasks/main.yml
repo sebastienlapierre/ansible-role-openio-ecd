@@ -1,0 +1,96 @@
+# roles/ecd/tasks/main.yml
+---
+- name: "Include {{ ansible_distribution }} variables"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  tags: install
+
+- name: Create the 'openio' group
+  group:
+    name: openio
+    gid: "{{ openio_group_openio_gid | default('220')}}"
+  tags: install
+
+- name: Create the 'openio' user
+  user:
+    name: openio
+    comment: "openio account"
+    uid: "{{ openio_user_openio_uid | default('120')}}"
+    group: openio
+  tags: install
+
+- name: "Include {{ ansible_distribution }} tasks"
+  include_tasks: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  tags: install
+
+- name: Test directories presence
+  stat:
+    path: "{{ item }}"
+  register: _dir
+  with_items:
+    - "/etc/gridinit.d/{{ openio_ecd_namespace }}"
+    - "{{ openio_ecd_sysconfig_dir }}/ecd-{{ openio_ecd_serviceid }}"
+    - "{{ openio_ecd_volume }}"
+    - "{{ openio_ecd_pid_directory }}"
+    - "{{ openio_ecd_socket_directory }}"
+    - "/var/lib/oio/sds/{{ openio_ecd_namespace }}/coredump"
+    - "/var/log/oio/sds/{{ openio_ecd_namespace }}/ecd-{{ openio_ecd_serviceid }}"
+
+- name: Ensure directories exists
+  file:
+    path: "{{ item.item }}"
+    state: directory
+    owner: openio
+    group: openio
+    mode: 0755
+    recurse: true
+  with_items: "{{ _dir.results }}"
+  when: not item.stat.exists
+  tags: install
+
+- name: Ensure pid directory is persistant
+  lineinfile:
+    dest: /etc/tmpfiles.d/ecd.conf
+    create: true
+    line: "d {{ openio_ecd_pid_directory }} 755 openio openio -"
+    owner: openio
+    group: openio
+    mode: 0644
+  tags: install
+  when: openio_ecd_pid_directory.split(' ')[0] | dirname is match("/run/.*")
+
+- name: Generate configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: openio
+    group: openio
+    mode: 0644
+  with_items:
+    - src: "ecd.conf.j2"
+      dest: "{{ openio_ecd_sysconfig_dir }}/\
+        ecd-{{ openio_ecd_serviceid }}/ecd-{{ openio_ecd_serviceid }}-httpd.conf"
+    - src: "gridinit_ecd.conf.j2"
+      dest: "{{ openio_ecd_gridinit_dir }}/ecd-{{ openio_ecd_serviceid }}.conf"
+  register: _ecd_conf
+
+- name: Copy WSGI Script
+  copy:
+    src: ecd.wsgi
+    dest: "{{ openio_ecd_sysconfig_dir }}/{{ openio_ecd_servicename }}/{{ openio_ecd_servicename }}.wsgi"
+    owner: openio                                                                                                       
+    group: openio                                                                                                       
+    mode: 0644 
+
+- name: restart ecd
+  shell: |
+    gridinit_cmd reload
+    gridinit_cmd restart  {{openio_ecd_namespace}}-ecd-{{openio_ecd_serviceid}}
+  when: _ecd_conf.changed
+  tags: configure
+...

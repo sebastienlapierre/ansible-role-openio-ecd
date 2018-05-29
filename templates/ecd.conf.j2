@@ -1,0 +1,59 @@
+# {{ ansible_managed }}
+LoadModule mpm_worker_module   {{ ecd_httpd_moduledir }}/mod_mpm_worker.so
+LoadModule authz_core_module   {{ ecd_httpd_moduledir }}/mod_authz_core.so
+LoadModule wsgi_module         {{ ecd_httpd_moduledir }}/mod_wsgi.so
+{% if ansible_os_family == 'RedHat' %}
+LoadModule unixd_module        {{ ecd_httpd_moduledir }}/mod_unixd.so
+LoadModule log_config_module   {{ ecd_httpd_moduledir }}/mod_log_config.so
+{% endif %}
+
+Listen          {{ openio_ecd_bind_address }}:{{ openio_ecd_bind_port }}
+PidFile         {{ openio_ecd_pid_directory }}/httpd.pid
+ServerRoot      /var/lib/oio/sds/{{ openio_ecd_namespace }}/coredump
+ServerName      localhost
+ServerSignature off
+ServerTokens    Prod
+DocumentRoot    {{ openio_ecd_volume }}
+
+User  openio
+Group openio
+
+LogFormat "%h %l %t \"%r\" %>s %b %D" log/common 
+ErrorLog  /var/log/oio/sds/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}/{{ openio_ecd_servicename }}-httpd-errors.log
+CustomLog /var/log/oio/sds/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}/{{ openio_ecd_servicename }}-httpd-access.log log/common env=!dontlog
+LogLevel  info
+
+<IfModule setenvif_module>
+SetEnvIf Request_URI "^/(info|stat)$" dontlog
+</IfModule>
+
+<IfModule wsgi_module>
+WSGIDaemonProcess {{ openio_ecd_servicename }} processes=2 threads=1 user=openio group=openio
+#WSGIProcessGroup {{ openio_ecd_servicename }}
+WSGIApplicationGroup {{ openio_ecd_servicename }}
+WSGIScriptAlias / {{ openio_ecd_sysconfig_dir }}/{{ openio_ecd_servicename }}/{{ openio_ecd_servicename }}.wsgi
+WSGISocketPrefix {{ openio_ecd_socket_directory }}
+WSGIChunkedRequest On
+</IfModule>
+
+#<IfModule prefork.c>
+#MaxClients       150
+#StartServers     5
+#MinSpareServers  5
+#MaxSpareServers  10
+#</IfModule>
+
+<IfModule worker.c>
+StartServers        5
+MaxClients          100
+MinSpareThreads     5
+MaxSpareThreads     25
+ThreadsPerChild     10
+MaxRequestsPerChild 0
+</IfModule>
+
+LimitRequestFields 200
+
+<VirtualHost {{ openio_ecd_bind_address }}:{{ openio_ecd_bind_port }}>
+# DO NOT REMOVE (even if empty) !
+</VirtualHost>

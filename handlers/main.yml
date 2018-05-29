@@ -1,0 +1,8 @@
+# roles/ecd/handlers/main.yml
+---
+#- name: restart ecd
+#  service:
+#    name: "{{ ecd_service }}"
+#    state: restarted
+#
+...

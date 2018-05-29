@@ -1,0 +1,9 @@
+---
+openio_ecd_sysconfig_dir: "/etc/oio/sds/{{ openio_ecd_namespace }}"
+openio_ecd_servicename: "ecd-{{ openio_ecd_serviceid }}"
+
+openio_ecd_definition_file: >
+  "{{ openio_ecd_sysconfig_dir }}/
+  {{ openio_ecd_servicename }}/{{ openio_ecd_servicename }}.conf"
+openio_ecd_gridinit_dir: "/etc/gridinit.d/{{ openio_ecd_namespace }}"
+...
