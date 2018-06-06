@@ -24,7 +24,7 @@ An Ansible role for install and configure ECD. Specifically, the responsibilitie
 | `openio_ecd_pid_directory` | `/run/ecd/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}` | Folder for pid file |
 | `openio_ecd_serviceid` | `0` |	ID in gridinit |
 | `openio_ecd_socket_directory` | `"/run/ecd/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}"` | Folder for socket file |
-| `openio_ecd_version` | `'*'` | Install a specific version |
+| `openio_ecd_version` | `latest` | Install a specific version |
 | `openio_ecd_volume` | `/var/lib/oio/sds/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}"` | Path to store data |
 
 ## Dependencies

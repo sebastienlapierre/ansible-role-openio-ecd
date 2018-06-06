@@ -4,7 +4,7 @@
 ecd_packages:
   - apache2
   - libapache2-mod-wsgi
-  - "openio-sds={{ openio_ecd_version }}"
+  - "{{ 'openio-sds' if openio_ecd_version == 'latest' else 'openio-sds=' ~ openio_ecd_version }}"
 
 ecd_httpd_bin: /usr/sbin/apache2
 ecd_httpd_moduledir: /usr/lib/apache2/modules
