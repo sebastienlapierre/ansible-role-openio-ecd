@@ -19,6 +19,6 @@ openio_ecd_socket_directory: "/run/ecd/{{ openio_ecd_namespace }}/{{ openio_ecd_
 
 openio_ecd_version: 'latest'
 
-openio_ecd_wsgi_processes: "{{ ansible_processor_cores }}"
+openio_ecd_wsgi_processes: "{{ ansible_processor_vcpus }}"
 openio_ecd_wsgi_threads: 1
 ...
