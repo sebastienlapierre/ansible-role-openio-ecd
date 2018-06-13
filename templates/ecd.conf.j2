@@ -28,7 +28,7 @@ SetEnvIf Request_URI "^/(info|stat)$" dontlog
 </IfModule>
 
 <IfModule wsgi_module>
-WSGIDaemonProcess {{ openio_ecd_servicename }} processes=2 threads=1 user=openio group=openio
+WSGIDaemonProcess {{ openio_ecd_servicename }} processes={{ openio_ecd_wsgi_processes }} threads={{ openio_ecd_wsgi_threads }} user=openio group=openio
 #WSGIProcessGroup {{ openio_ecd_servicename }}
 WSGIApplicationGroup {{ openio_ecd_servicename }}
 WSGIScriptAlias / {{ openio_ecd_sysconfig_dir }}/{{ openio_ecd_servicename }}/{{ openio_ecd_servicename }}.wsgi
