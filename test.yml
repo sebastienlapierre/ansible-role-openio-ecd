@@ -8,6 +8,7 @@
   roles:
     - role: repo
     - role: gridinit
+      openio_gridinit_per_ns: true
       openio_gridinit_namespace: "{{ NS }}"
     - role: role_under_test
       openio_ecd_namespace: "{{ NS }}"
