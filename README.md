@@ -20,6 +20,8 @@ An Ansible role for install and configure ECD. Specifically, the responsibilitie
 | `openio_ecd_bind_port` | `6017` | Listening port |
 | `openio_ecd_gridinit_dir` | `/etc/gridinit.d/{{ openio_ecd_namespace }}` | Path to copy the gridinit conf |
 | `openio_ecd_gridinit_file_prefix` | `""` | Maybe set it to {{ openio_ecd_namespace }}- for old gridinit's style |
+| `openio_ecd_gridinit_on_die` | `respawn` | Behaviour on failure |
+| `openio_ecd_gridinit_start_at_boot` | `true` | Start at system boot |
 | `openio_ecd_namespace` | `OPENIO` | Namespace |
 | `openio_ecd_pid_directory` | `/run/ecd/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}` | Folder for pid file |
 | `openio_ecd_serviceid` | `0` |	ID in gridinit |
