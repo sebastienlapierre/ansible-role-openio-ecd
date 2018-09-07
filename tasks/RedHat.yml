@@ -6,4 +6,9 @@
   with_items: "{{ ecd_packages }}"
   loop_control:
     loop_var: pkg
+
+- name: Install libisal
+  package:
+    name: libisal
+  when: ansible_architecture == 'x86_64'
 ...
