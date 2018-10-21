@@ -8,4 +8,6 @@ ecd_packages:
 
 ecd_httpd_bin: /usr/sbin/httpd
 ecd_httpd_moduledir: /usr/lib64/httpd/modules
+
+syslog_user: openio
 ...

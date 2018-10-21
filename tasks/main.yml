@@ -39,7 +39,6 @@
     - "{{ openio_ecd_pid_directory }}"
     - "{{ openio_ecd_socket_directory }}"
     - "/var/lib/oio/sds/{{ openio_ecd_namespace }}/coredump"
-    - "/var/log/oio/sds/{{ openio_ecd_namespace }}/ecd-{{ openio_ecd_serviceid }}"
 
 - name: Ensure directories exists
   file:
@@ -51,6 +50,16 @@
     recurse: true
   with_items: "{{ _dir.results }}"
   when: not item.stat.exists
+  tags: install
+
+- name: Ensure log directory
+  file:
+    path: "/var/log/oio/sds/{{ openio_ecd_namespace }}/ecd-{{ openio_ecd_serviceid }}"
+    state: directory
+    owner: "{{ syslog_user }}"
+    group: openio
+    mode: 0750
+    recurse: true
   tags: install
 
 - name: Ensure pid directory is persistant

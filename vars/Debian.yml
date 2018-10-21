@@ -8,5 +8,5 @@ ecd_packages:
 
 ecd_httpd_bin: /usr/sbin/apache2
 ecd_httpd_moduledir: /usr/lib/apache2/modules
-
+syslog_user: syslog
 ...
