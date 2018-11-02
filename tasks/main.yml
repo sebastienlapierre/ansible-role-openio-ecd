@@ -58,7 +58,7 @@
     state: directory
     owner: "{{ syslog_user }}"
     group: openio
-    mode: 0750
+    mode: 0770
     recurse: true
   tags: install
 
