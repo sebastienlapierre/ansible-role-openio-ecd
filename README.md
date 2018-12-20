@@ -43,6 +43,7 @@ No dependencies.
   vars:
     NS: OPENIO
   roles:
+    - role: users
     - role: repo
     - role: gridinit
       openio_gridinit_namespace: "{{ NS }}"

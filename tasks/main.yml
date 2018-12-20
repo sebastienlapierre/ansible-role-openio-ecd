@@ -7,20 +7,6 @@
     - "{{ ansible_os_family }}.yml"
   tags: install
 
-- name: Create the 'openio' group
-  group:
-    name: openio
-    gid: "{{ openio_group_openio_gid | default('220')}}"
-  tags: install
-
-- name: Create the 'openio' user
-  user:
-    name: openio
-    comment: "openio account"
-    uid: "{{ openio_user_openio_uid | default('120')}}"
-    group: openio
-  tags: install
-
 - name: "Include {{ ansible_distribution }} tasks"
   include_tasks: "{{ item }}"
   with_first_found:
@@ -28,38 +14,23 @@
     - "{{ ansible_os_family }}.yml"
   tags: install
 
-- name: Test directories presence
-  stat:
-    path: "{{ item }}"
-  register: _dir
-  with_items:
-    - "/etc/gridinit.d/{{ openio_ecd_namespace }}"
-    - "{{ openio_ecd_sysconfig_dir }}/ecd-{{ openio_ecd_serviceid }}"
-    - "{{ openio_ecd_volume }}"
-    - "{{ openio_ecd_pid_directory }}"
-    - "{{ openio_ecd_socket_directory }}"
-    - "/var/lib/oio/sds/{{ openio_ecd_namespace }}/coredump"
-
 - name: Ensure directories exists
   file:
-    path: "{{ item.item }}"
+    path: "{{ item.path }}"
     state: directory
-    owner: openio
-    group: openio
-    mode: 0755
-    recurse: true
-  with_items: "{{ _dir.results }}"
-  when: not item.stat.exists
-  tags: install
-
-- name: Ensure log directory
-  file:
-    path: "/var/log/oio/sds/{{ openio_ecd_namespace }}/ecd-{{ openio_ecd_serviceid }}"
-    state: directory
-    owner: "{{ syslog_user }}"
-    group: openio
-    mode: 0770
-    recurse: true
+    owner: "{{ item.owner | default('openio') }}"
+    group: "{{ item.group | default('openio') }}"
+    mode: "{{ item.mode | default(0755) }}"
+  with_items:
+    - path: "/etc/gridinit.d/{{ openio_ecd_namespace }}"
+    - path: "{{ openio_ecd_sysconfig_dir }}/{{ openio_ecd_servicename }}"
+    - path: "{{ openio_ecd_pid_directory }}"
+    - path: "{{ openio_ecd_socket_directory }}"
+    - path: "{{ openio_ecd_volume }}"
+    - path: "/var/lib/oio/sds/{{ openio_ecd_namespace }}/coredump"
+    - path: "/var/log/oio/sds/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}"
+      owner: "{{ syslog_user }}"
+      mode: "0770"
   tags: install
 
 - name: Ensure pid directory is persistant
@@ -83,10 +54,10 @@
   with_items:
     - src: "ecd.conf.j2"
       dest: "{{ openio_ecd_sysconfig_dir }}/\
-        ecd-{{ openio_ecd_serviceid }}/ecd-{{ openio_ecd_serviceid }}-httpd.conf"
+        ecd-{{ openio_ecd_serviceid }}/{{ openio_ecd_servicename }}-httpd.conf"
     - src: "gridinit_ecd.conf.j2"
       dest: "{{ openio_ecd_gridinit_dir }}/{{ openio_ecd_gridinit_file_prefix }}\
-        ecd-{{ openio_ecd_serviceid }}.conf"
+        {{ openio_ecd_servicename }}.conf"
   register: _ecd_conf
 
 - name: Copy WSGI Script
@@ -100,7 +71,7 @@
 - name: restart ecd
   shell: |
     gridinit_cmd reload
-    gridinit_cmd restart  {{openio_ecd_namespace}}-ecd-{{openio_ecd_serviceid}}
+    gridinit_cmd restart  {{openio_ecd_namespace}}-{{openio_ecd_servicename}}
   when: _ecd_conf.changed
   tags: configure
 ...

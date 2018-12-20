@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
-[Service.{{ openio_ecd_namespace }}-ecd-{{ openio_ecd_serviceid }}]
+[Service.{{ openio_ecd_namespace }}-{{ openio_ecd_servicename }}]
 command={{ ecd_httpd_bin }} -D FOREGROUND -f {{ openio_ecd_sysconfig_dir }}/{{ openio_ecd_servicename }}/{{ openio_ecd_servicename }}-httpd.conf
 enabled=true
 start_at_boot={{ openio_ecd_gridinit_start_at_boot }}
