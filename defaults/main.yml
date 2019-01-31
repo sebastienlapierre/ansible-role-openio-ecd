@@ -16,8 +16,8 @@ openio_ecd_gridinit_start_at_boot: true
 
 openio_ecd_volume: "/var/lib/oio/sds/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}"
 
-openio_ecd_pid_directory: "/run/ecd/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}"
-openio_ecd_socket_directory: "/run/ecd/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}"
+openio_ecd_pid_directory: "/run/oio/sds/{{ openio_ecd_namespace }}"
+openio_ecd_socket_directory: "/run/oio/sds/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}"
 
 openio_ecd_version: 'latest'
 

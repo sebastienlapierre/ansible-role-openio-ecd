@@ -8,7 +8,7 @@ LoadModule log_config_module   {{ ecd_httpd_moduledir }}/mod_log_config.so
 {% endif %}
 
 Listen          {{ openio_ecd_bind_address }}:{{ openio_ecd_bind_port }}
-PidFile         {{ openio_ecd_pid_directory }}/httpd.pid
+PidFile         {{ openio_ecd_pid_directory }}/{{ openio_ecd_servicename }}-httpd.pid
 ServerRoot      /var/lib/oio/sds/{{ openio_ecd_namespace }}/coredump
 ServerName      localhost
 ServerSignature off

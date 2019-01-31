@@ -23,9 +23,9 @@ An Ansible role for install and configure ECD. Specifically, the responsibilitie
 | `openio_ecd_gridinit_on_die` | `respawn` | Behaviour on failure |
 | `openio_ecd_gridinit_start_at_boot` | `true` | Start at system boot |
 | `openio_ecd_namespace` | `OPENIO` | Namespace |
-| `openio_ecd_pid_directory` | `/run/ecd/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}` | Folder for pid file |
+| `openio_ecd_pid_directory` | `/run/oio/sds/{{ openio_ecd_namespace }}` | Folder for pid file |
 | `openio_ecd_serviceid` | `0` |	ID in gridinit |
-| `openio_ecd_socket_directory` | `"/run/ecd/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}"` | Folder for socket file |
+| `openio_ecd_socket_directory` | `"/run/oio/sds/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}"` | Folder for socket file |
 | `openio_ecd_version` | `latest` | Install a specific version |
 | `openio_ecd_volume` | `/var/lib/oio/sds/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}"` | Path to store data |
 | `openio_ecd_wsgi_processes` | `{{ ansible_processor_vcpus }}` | Defines the number of daemon processes that should be started in this process group |
