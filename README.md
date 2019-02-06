@@ -30,6 +30,7 @@ An Ansible role for install and configure ECD. Specifically, the responsibilitie
 | `openio_ecd_volume` | `/var/lib/oio/sds/{{ openio_ecd_namespace }}/{{ openio_ecd_servicename }}"` | Path to store data |
 | `openio_ecd_wsgi_processes` | `{{ ansible_processor_vcpus }}` | Defines the number of daemon processes that should be started in this process group |
 | `openio_ecd_wsgi_threads` | `1` | Defines the number of threads to be created to handle requests in each daemon process within the process group |
+| `openio_ecd_provision_only` | `false` | Provision only without restarting / bootstrapping |
 
 ## Dependencies
 
